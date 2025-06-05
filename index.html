@@ -22,6 +22,7 @@
         justify-content: center;
         min-height: 100vh;
         padding: 2rem;
+        overflow-x: hidden;
       }
       header {
         animation: fadeInDown 1s ease-out forwards;
@@ -38,48 +39,88 @@
         }
       }
       h1 {
-        font-size: 3rem;
+        font-size: 3.5rem;
         font-weight: 800;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         text-align: center;
       }
-      p {
-        font-size: 1.2rem;
-        color: #ccc;
-        max-width: 700px;
-        text-align: center;
-        margin-bottom: 3rem;
+      .shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+      }
+      .circle, .square, .triangle {
+        position: absolute;
+        opacity: 0.05;
+        animation: float 10s infinite ease-in-out;
+      }
+      .circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: white;
+        top: 10%;
+        left: 80%;
+      }
+      .square {
+        width: 100px;
+        height: 100px;
+        background: white;
+        top: 60%;
+        left: 10%;
+      }
+      .triangle {
+        width: 0;
+        height: 0;
+        border-left: 60px solid transparent;
+        border-right: 60px solid transparent;
+        border-bottom: 100px solid white;
+        top: 30%;
+        left: 50%;
+      }
+      @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+        100% { transform: translateY(0); }
       }
       .links {
         display: flex;
-        gap: 1.5rem;
+        gap: 2rem;
         flex-wrap: wrap;
         justify-content: center;
       }
       .icon {
-        font-size: 2rem;
+        font-size: 2.5rem;
         color: #fff;
         transition: transform 0.3s ease, color 0.3s ease;
       }
       .icon:hover {
-        transform: scale(1.1);
+        transform: scale(1.2);
         color: #999;
       }
       section {
         background-color: #333;
         padding: 2rem;
-        margin-top: 2rem;
-        border-radius: 12px;
+        border-radius: 16px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        max-width: 800px;
+        max-width: 700px;
         text-align: center;
       }
     </style>
   </head>
   <body>
+    <div class="shapes">
+      <div class="circle"></div>
+      <div class="square"></div>
+      <div class="triangle"></div>
+    </div>
+
     <header>
       <h1>Florian Holzhüter</h1>
-      <p>Ich erstelle politischen Content für TikTok, Instagram, YouTube & Telegram. Mein Ziel ist es, politische Themen verständlich und direkt aufzubereiten – für die Generation, die keine Zeit für Bullshit hat.</p>
     </header>
 
     <section>
