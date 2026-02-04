@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Für Eli ❤️</title>
+<style>
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial; }
+body { margin:0; background:#f5f5f7; display:flex; justify-content:center; align-items:center; height:100vh; }
+.container { background:white; padding:30px; width:90%; max-width:400px; border-radius:20px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.08); animation:fadeIn 1s ease; }
+h1 { font-weight:500; }
+p { font-size:1.1em; }
+input { width:100%; padding:12px; margin-top:15px; border-radius:12px; border:1px solid #ccc; font-size:1em; }
+button { margin-top:15px; padding:12px; width:100%; border:none; border-radius:12px; background:#1d1d1f; color:white; font-size:1em; }
+#feedback { margin-top:10px; color:#d33; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 id="title">Für Eli ❤️</h1>
+  <p id="question"></p>
+  <input type="text" id="answer" placeholder="Antwort eingeben">
+  <button onclick="checkAnswer()">Weiter</button>
+  <p id="feedback"></p>
+</div>
+
+<script>
+let step = 0;
+const riddles = [
+  { question: "Wie lautet die Postleitzahl unseres Restaurants?", answer: "10405" },
+  { question: "Der Raum wird dunkel, bevor es spannend wird.", answer: "kino" },
+  { question: "Welche bekannte Hauptfigur wird immer wieder für ihr Aussehen gefatshamed?", answer: "justus jonas" },
+  { question: "Wo endet der Tag und beginnt die Ruhe?", answer: "zuhause" },
+  { question: "Seit wann sind wir zusammen? (DD.MM.JJJJ)", answer: "20.07.2025" }
+];
+const questionEl = document.getElementById("question");
+const feedbackEl = document.getElementById("feedback");
+const answerEl = document.getElementById("answer");
+questionEl.textContent = riddles[0].question;
+
+function checkAnswer() {
+  const userAnswer = answerEl.value.trim().toLowerCase();
+  if (userAnswer === riddles[step].answer) {
+    step++; feedbackEl.textContent = ""; answerEl.value = "";
+    if (step < riddles.length) {
+      questionEl.textContent = riddles[step].question;
+      document.querySelector(".container").style.animation = "fadeIn 0.8s ease";
+    } else {
+      document.querySelector(".container").innerHTML = `
+        <h1>Happy Valentinstag ❤️</h1>
+        <p>Eli, ich liebe dich.</p>
+        <p>Danke, dass du diesen Abend mit mir gehst.</p>
+        <p>💖</p>`;
+    }
+  } else {
+    feedbackEl.textContent = "Fast 😉 Versuch’s nochmal.";
+  }
+}
+</script>
+</body>
+</html>
