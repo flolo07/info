@@ -40,7 +40,7 @@ padding:24px;
 }
 h1{margin:0 0 8px;font-size:28px;}
 p{margin:8px 0;color:var(--muted);line-height:1.5;}
-.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center;}
 button{
 border:none;
 border-radius:12px;
@@ -60,6 +60,7 @@ padding:12px 14px;
 border-radius:12px;
 border:1px solid #00000022;
 font-size:16px;
+outline:none;
 }
 .feedback{
 margin-top:14px;
@@ -91,6 +92,23 @@ text-align:center;
 }
 .stat .num{font-size:20px;font-weight:700;}
 .stat .lab{font-size:12px;color:var(--muted);}
+
+.pdfBox{
+margin-top:14px;
+padding:14px;
+border-radius:14px;
+background:#00000008;
+display:none;
+}
+.pdfBox iframe{
+width:100%;
+height:520px;
+border:0;
+border-radius:14px;
+background:#fff;
+}
+.smallNote{font-size:13px;color:var(--muted);margin-top:10px;}
+a.link{color:inherit;}
 </style>
 </head>
 <body>
@@ -113,12 +131,30 @@ text-align:center;
 <p id="qText"></p>
 
 <div class="row">
-<input id="answer" placeholder="Antwort eintippen..." />
+<input id="answer" placeholder="Antwort eintippen..." autocomplete="off" />
 <button id="check">Antwort prüfen</button>
 <button id="next" class="secondary" style="display:none;">Weiter</button>
 </div>
 
 <div id="feedback" class="feedback"></div>
+
+<!-- PDF reveal (only for Justus question when correct) -->
+<div class="pdfBox" id="pdfJustus">
+  <strong>📄 Freigeschaltet: Die geheimen Tickets</strong>
+  <div class="row" style="margin-top:10px;">
+    <a class="link" href="tickets.pdf" target="_blank" rel="noopener">
+      <button>PDF im neuen Tab öffnen</button>
+    </a>
+    <button class="secondary" id="togglePdf">PDF hier anzeigen</button>
+  </div>
+
+  <div id="pdfWrap" style="display:none; margin-top:12px;">
+    <iframe src="tickets.pdf"></iframe>
+    <div class="smallNote">
+      Hinweis: Manche Handys (vor allem iPhone/Safari) öffnen PDFs lieber separat – dann einfach „PDF im neuen Tab öffnen“ nutzen.
+    </div>
+  </div>
+</div>
 
 <div class="counter" id="counter">
 <strong>Wie lange sind wir schon zusammen?</strong>
@@ -130,7 +166,6 @@ text-align:center;
 <div class="stat"><div class="num" id="s"></div><div class="lab">Sekunden</div></div>
 </div>
 </div>
-
 </section>
 
 <!-- END -->
@@ -147,112 +182,150 @@ Danke für den schönen Tag
 
 <script>
 const REL_DATE = new Date(2025,6,20);
-let index=0;
-let tries=0;
-let timer=null;
+let index = 0;
+let tries = 0;
+let timer = null;
 
-const questions=[
-{
-text:"Was steht heute an?",
-check:(a)=>{
-a=a.toLowerCase();
-return (a.includes("überraschung")&&(a.includes("restaurant")||a.includes("essen")||a.includes("dinner")));
-},
-solution:"Eine Überraschung und ein Restaurantbesuch."
-},
-{
-text:"Wie ist die Postleitzahl von dem Restaurant wo wir essen gehen?",
-check:(a)=>a.trim()==="10405",
-solution:"10405"
-},
-{
-text:"Wer wird immer gefatshamed?",
-check:(a)=>a.trim().toLowerCase()==="justus jonas",
-solution:"Justus Jonas"
-},
-{
-text:"Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
-check:(a)=>a.trim()==="20.07.2025",
-solution:"20.07.2025",
-after:()=>{
-document.getElementById("counter").style.display="block";
-startCounter();
-}
-}
+const questions = [
+  {
+    text: "Was steht heute an?",
+    check: (a) => {
+      a = (a || "").toLowerCase().trim();
+      const hasSurprise = a.includes("überraschung") || a.includes("surprise");
+      const hasFood =
+        a.includes("restaurant") ||
+        a.includes("essen") ||
+        a.includes("essen gehen") ||
+        a.includes("dinner") ||
+        a.includes("abendessen");
+      return hasSurprise && hasFood;
+    },
+    solution: "Eine Überraschung und ein Restaurantbesuch."
+  },
+  {
+    text: "Wie ist die Postleitzahl von dem Restaurant wo wir essen gehen?",
+    check: (a) => (a || "").trim() === "10405",
+    solution: "10405"
+  },
+  {
+    text: "Wer wird immer gefatshamed?",
+    check: (a) => (a || "").trim().toLowerCase() === "justus jonas",
+    solution: "Justus Jonas",
+    after: () => {
+      // PDF reveal on correct Justus answer
+      document.getElementById("pdfJustus").style.display = "block";
+    }
+  },
+  {
+    text: "Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
+    check: (a) => (a || "").trim() === "20.07.2025",
+    solution: "20.07.2025",
+    after: () => {
+      document.getElementById("counter").style.display = "block";
+      startCounter();
+    }
+  }
 ];
 
 function show(id){
-["start","quiz","end"].forEach(s=>document.getElementById(s).style.display="none");
-document.getElementById(id).style.display="block";
+  ["start","quiz","end"].forEach(s => document.getElementById(s).style.display = "none");
+  document.getElementById(id).style.display = "block";
 }
 
-document.getElementById("no").onclick=()=>{
-const e=document.getElementById("error");
-e.style.display="block";
-e.textContent="Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
+document.getElementById("no").onclick = () => {
+  const e = document.getElementById("error");
+  e.style.display = "block";
+  e.textContent = "Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
 };
 
-document.getElementById("yes").onclick=()=>{
-show("quiz");
-loadQuestion();
+document.getElementById("yes").onclick = () => {
+  show("quiz");
+  index = 0;
+  loadQuestion();
 };
 
 function loadQuestion(){
-tries=0;
-document.getElementById("feedback").style.display="none";
-document.getElementById("next").style.display="none";
-document.getElementById("answer").value="";
-document.getElementById("qTitle").textContent="Frage "+(index+1)+"/4";
-document.getElementById("qText").textContent=questions[index].text;
+  tries = 0;
+  document.getElementById("feedback").style.display = "none";
+  document.getElementById("next").style.display = "none";
+  document.getElementById("answer").value = "";
+  document.getElementById("qTitle").textContent = "Frage " + (index+1) + "/4";
+  document.getElementById("qText").textContent = questions[index].text;
+
+  // hide extras unless unlocked
+  document.getElementById("pdfJustus").style.display = "none";
+  document.getElementById("pdfWrap").style.display = "none";
+
+  if(index !== 3){
+    document.getElementById("counter").style.display = "none";
+    if(timer){ clearInterval(timer); timer = null; }
+  }
 }
 
-document.getElementById("check").onclick=()=>{
-const input=document.getElementById("answer").value;
-const fb=document.getElementById("feedback");
+document.getElementById("check").onclick = () => {
+  const input = document.getElementById("answer").value;
+  const fb = document.getElementById("feedback");
 
-if(questions[index].check(input)){
-fb.className="feedback ok";
-fb.textContent="✅ Richtig.";
-fb.style.display="block";
-document.getElementById("next").style.display="inline-block";
-if(questions[index].after)questions[index].after();
-}else{
-tries++;
-fb.className="feedback no";
-if(tries>=3){
-fb.textContent="❌ Leider falsch.\nLösung: "+questions[index].solution;
-}else{
-fb.textContent="❌ Leider falsch. Versuch es nochmal.";
-}
-fb.style.display="block";
-}
+  if(questions[index].check(input)){
+    fb.className = "feedback ok";
+    fb.textContent = "✅ Richtig.";
+    fb.style.display = "block";
+    document.getElementById("next").style.display = "inline-block";
+
+    if(questions[index].after) questions[index].after();
+  } else {
+    tries++;
+    fb.className = "feedback no";
+    if(tries >= 3){
+      fb.textContent = "❌ Leider falsch.\nLösung: " + questions[index].solution;
+    } else {
+      fb.textContent = "❌ Leider falsch. Versuch es nochmal.";
+    }
+    fb.style.display = "block";
+  }
 };
 
-document.getElementById("next").onclick=()=>{
-index++;
-if(index>=questions.length){
-show("end");
-clearInterval(timer);
-}else{
-loadQuestion();
-}
+document.getElementById("next").onclick = () => {
+  index++;
+  if(index >= questions.length){
+    show("end");
+    if(timer){ clearInterval(timer); timer = null; }
+  } else {
+    loadQuestion();
+  }
 };
+
+document.getElementById("togglePdf").onclick = () => {
+  const w = document.getElementById("pdfWrap");
+  w.style.display = (w.style.display === "none") ? "block" : "none";
+};
+
+document.getElementById("answer").addEventListener("keydown", (e) => {
+  if(e.key === "Enter"){
+    // Enter = check; if next button visible, go next
+    const nextVisible = document.getElementById("next").style.display !== "none";
+    if(nextVisible) document.getElementById("next").click();
+    else document.getElementById("check").click();
+  }
+});
 
 function startCounter(){
-timer=setInterval(()=>{
-let diff=(new Date()-REL_DATE)/1000;
-let weeks=Math.floor(diff/(7*24*3600));
-let days=Math.floor((diff%(7*24*3600))/(24*3600));
-let hours=Math.floor((diff%(24*3600))/3600);
-let mins=Math.floor((diff%3600)/60);
-let secs=Math.floor(diff%60);
+  timer = setInterval(() => {
+    let diff = (new Date() - REL_DATE) / 1000;
+    if(diff < 0) diff = 0;
 
-document.getElementById("w").textContent=weeks;
-document.getElementById("d").textContent=days;
-document.getElementById("h").textContent=hours;
-document.getElementById("m").textContent=mins;
-document.getElementById("s").textContent=secs;
-},1000);
+    let weeks = Math.floor(diff / (7*24*3600));
+    let days  = Math.floor((diff % (7*24*3600)) / (24*3600));
+    let hours = Math.floor((diff % (24*3600)) / 3600);
+    let mins  = Math.floor((diff % 3600) / 60);
+    let secs  = Math.floor(diff % 60);
+
+    document.getElementById("w").textContent = weeks;
+    document.getElementById("d").textContent = days;
+    document.getElementById("h").textContent = hours;
+    document.getElementById("m").textContent = mins;
+    document.getElementById("s").textContent = secs;
+  }, 1000);
 }
 </script>
 </body>
