@@ -142,14 +142,13 @@
       <!-- SCREEN 1 -->
       <section id="screenStart">
         <h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
-        <p>Bitte sorgfältig auswählen. Das System ist… empfindlich 😇</p>
+        <p>Bitte sorgfältig auswählen. </p>
         <div class="row">
           <button id="btnYes">Ja</button>
           <button class="secondary" id="btnNo">Nein</button>
         </div>
         <div class="errorBox" id="noError"></div>
-        <div class="footer">Hinweis: “Nein” erzeugt aus unerfindlichen Gründen einen Fehlercode.</div>
-      </section>
+    
 
       <!-- QUIZ -->
       <section id="screenQuiz" style="display:none;">
@@ -253,7 +252,7 @@
       {
         title: "Frage 1/4",
         text: "Was steht heute an?",
-        hint: "Tipp: Es geht um eine Überraschung + Restaurant.",
+        hint: "Tipp: Das eine weist du, das andere nicht.",
         check: (raw) => {
           const a = normalize(raw);
 
@@ -299,8 +298,8 @@
       },
       {
         title: "Frage 4/4",
-        text: "Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
-        hint: "Format: 20.07.2025",
+        text: "Wann sind wir zusammen gekommen? ",
+        hint: "Format: (DD.MM.YYYY)",
         check: (raw) => {
           const d = parseDDMMYYYY(raw);
           if(!d) return { ok:false, expected:"20.07.2025", msg:"Format stimmt nicht. Bitte DD.MM.YYYY benutzen." };
