@@ -1,137 +1,455 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Für Eli ❤️</title>
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-<style>
-/* Grundstil */
-* { box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial; margin:0; padding:0; }
-body { background: linear-gradient(160deg,#ffe6e9,#fff0f5); display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; position:relative; }
-.container { background: rgba(255,255,255,0.85); padding:30px; width:90%; max-width:400px; border-radius:25px; text-align:center; box-shadow:0 15px 40px rgba(0,0,0,0.1); position:relative; z-index:2; transition:0.5s; }
-h1 { font-family: 'Dancing Script', cursive; font-weight:700; font-size:2em; margin-bottom:15px; color:#ff6f61; }
-p { font-family: 'Dancing Script', cursive; font-size:1.2em; margin:10px 0; color:#333; }
-input { width:100%; padding:12px; margin-top:15px; border-radius:12px; border:1px solid #ccc; font-size:1em; transition:0.3s; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial; }
-input:focus { border-color:#ff6f61; box-shadow:0 0 10px rgba(255,111,97,0.3); outline:none; }
-button { margin-top:15px; padding:12px; width:100%; border:none; border-radius:12px; background:#ff6f61; color:white; font-size:1em; cursor:pointer; transition:0.3s; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial; }
-button:hover { background:#e05550; }
-#feedback { margin-top:10px; min-height:20px; font-weight:500; transition:0.3s; }
-#progress { margin-top:10px; font-size:0.9em; color:#555; }
-
-/* Animationen */
-.fadeIn { animation:fadeIn 0.8s ease; }
-@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-
-/* Herzanimation */
-.heart { position:absolute; width:50px; height:50px; background:red; clip-path: polygon(50% 0%, 61% 12%, 75% 12%, 88% 25%, 100% 38%, 88% 50%, 50% 100%, 12% 50%, 0% 38%, 12% 25%, 25% 12%, 39% 12%); top:50%; left:50%; transform: translate(-50%, -50%) scale(0); opacity:0; z-index:3; }
-@keyframes pop { 0% { transform: translate(-50%, -50%) scale(0); opacity:0;} 50% { transform: translate(-50%, -50%) scale(1.3); opacity:1;} 100% { transform: translate(-50%, -50%) scale(1); opacity:1;} }
-
-/* Schweben Herzchen Hintergrund */
-.bg-heart { position:absolute; width:20px; height:20px; background:red; clip-path: polygon(50% 0%, 61% 12%, 75% 12%, 88% 25%, 100% 38%, 88% 50%, 50% 100%, 12% 50%, 0% 38%, 12% 25%, 25% 12%, 39% 12%); opacity:0.2; border-radius:50%; animation:floatBg 10s linear infinite; }
-@keyframes floatBg { 0% { transform: translateY(100vh) scale(0.5); } 100% { transform: translateY(-20vh) scale(1); } }
-
-/* Startbildschirm */
-.start-screen { position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(255,230,233,0.95); display:flex; justify-content:center; align-items:center; flex-direction:column; z-index:5; transition:0.5s; }
-.start-screen button { width:200px; background:#ff6f61; font-weight:bold; font-size:1.2em; }
-.start-screen h1 { margin-bottom:20px; font-family: 'Dancing Script', cursive; font-size:2.2em; color:#ff4b4b; text-align:center; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valentinstags-Date 💘</title>
+  <style>
+    :root{
+      --bg1:#ff4d6d;
+      --bg2:#7b2cbf;
+      --card:#ffffffee;
+      --text:#1b1b1f;
+      --muted:#5b5b66;
+      --btn:#111114;
+      --btnText:#fff;
+      --ok:#1f9d55;
+      --no:#d7263d;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 20%, #ff8fab 0%, transparent 60%),
+        radial-gradient(1000px 700px at 80% 30%, #c77dff 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+    .app{ width:min(760px, 100%); }
+    .card{
+      background:var(--card);
+      border-radius:18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+      padding:24px;
+      overflow:hidden;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#00000010;
+      color:var(--muted);
+      font-size:14px;
+      margin-bottom:12px;
+    }
+    h1{ margin:0 0 8px; font-size:28px; }
+    p{ margin:8px 0; color:var(--muted); line-height:1.5; }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+    button{
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      background:var(--btn);
+      color:var(--btnText);
+      font-size:16px;
+      cursor:pointer;
+      transition: transform .06s ease, opacity .2s ease;
+    }
+    button:active{ transform:scale(.98); }
+    button.secondary{
+      background:#00000012;
+      color:var(--text);
+    }
+    .errorBox, .feedback{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:12px;
+      background:#00000008;
+      border:1px solid #00000014;
+      display:none;
+      white-space:pre-wrap;
+    }
+    .feedback.ok{ border-color: #1f9d5540; background:#1f9d5510; color:#0f6a34; }
+    .feedback.no{ border-color: #d7263d40; background:#d7263d10; color:#8b1724; }
+    .inputWrap{
+      margin-top:14px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    input{
+      flex: 1 1 260px;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #00000022;
+      background:#fff;
+      font-size:16px;
+      outline:none;
+    }
+    input:focus{
+      border-color:#7b2cbf66;
+      box-shadow:0 0 0 4px #7b2cbf1a;
+    }
+    .tiny{
+      font-size:13px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .counter{
+      margin-top:14px;
+      padding:14px;
+      border-radius:14px;
+      background:#00000008;
+      border:1px solid #00000014;
+      display:none;
+    }
+    .counterGrid{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(80px, 1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    .stat{
+      background:#fff;
+      border:1px solid #00000014;
+      border-radius:14px;
+      padding:10px;
+      text-align:center;
+    }
+    .stat .num{ font-size:20px; font-weight:700; }
+    .stat .lab{ font-size:12px; color:var(--muted); margin-top:4px; }
+    .footer{
+      margin-top:18px;
+      font-size:12px;
+      color:#00000055;
+    }
+  </style>
 </head>
 <body>
+  <div class="app">
+    <div class="card">
+      <div class="badge">💘 Valentinstags-Planer</div>
 
-<!-- Hintergrund Herzchen -->
-<div class="bg-heart" style="left:10%; animation-delay:0s;"></div>
-<div class="bg-heart" style="left:30%; animation-delay:2s;"></div>
-<div class="bg-heart" style="left:50%; animation-delay:4s;"></div>
-<div class="bg-heart" style="left:70%; animation-delay:1s;"></div>
-<div class="bg-heart" style="left:90%; animation-delay:3s;"></div>
+      <!-- SCREEN 1 -->
+      <section id="screenStart">
+        <h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
+        <p>Bitte sorgfältig auswählen. Das System ist… empfindlich 😇</p>
+        <div class="row">
+          <button id="btnYes">Ja</button>
+          <button class="secondary" id="btnNo">Nein</button>
+        </div>
+        <div class="errorBox" id="noError"></div>
+        <div class="footer">Hinweis: “Nein” erzeugt aus unerfindlichen Gründen einen Fehlercode.</div>
+      </section>
 
-<!-- Herz Haupt -->
-<div class="heart" id="heart"></div>
+      <!-- QUIZ -->
+      <section id="screenQuiz" style="display:none;">
+        <h1 id="qTitle">Frage</h1>
+        <p id="qText"></p>
 
-<!-- Startbildschirm -->
-<div class="start-screen" id="startScreen">
-  <h1>Für Eli ❤️</h1>
-  <button onclick="startGame()">Start</button>
-</div>
+        <div class="inputWrap">
+          <input id="answerInput" type="text" placeholder="Antwort eintippen..." autocomplete="off" />
+          <button id="btnCheck">Antwort prüfen</button>
+          <button class="secondary" id="btnNext" style="display:none;">Weiter</button>
+        </div>
 
-<!-- Hauptcontainer -->
-<div class="container" id="container" style="display:none;">
-  <h1 id="title">Für Eli ❤️</h1>
-  <p id="question"></p>
-  <input type="text" id="answer" placeholder="Antwort eingeben">
-  <button onclick="checkAnswer()">Weiter</button>
-  <p id="feedback"></p>
-  <p id="progress"></p>
-</div>
+        <div class="tiny" id="hint"></div>
 
-<script>
-let step=0;
-const riddles=[
-  { question:"Wie lautet die Postleitzahl unseres Restaurants?", answer:"10405" },
-  { question:"Der Raum wird dunkel, bevor es spannend wird.", answer:"kino" },
-  { question:"Welche bekannte Hauptfigur wird immer wieder für ihr Aussehen gefatshamed?", answer:"justus jonas" },
-  { question:"Wo endet der Tag und beginnt die Ruhe?", answer:"zuhause" },
-  { question:"Seit wann sind wir zusammen? (DD.MM.JJJJ)", answer:"20.07.2025" }
-];
+        <div class="feedback" id="feedback"></div>
 
-const questionEl=document.getElementById("question");
-const feedbackEl=document.getElementById("feedback");
-const answerEl=document.getElementById("answer");
-const progressEl=document.getElementById("progress");
-const heartEl=document.getElementById("heart");
-const containerEl=document.getElementById("container");
-const startScreenEl=document.getElementById("startScreen");
+        <div class="counter" id="counterBox">
+          <div><strong>Wie lange sind wir schon zusammen?</strong></div>
+          <div class="counterGrid">
+            <div class="stat"><div class="num" id="wWeeks">-</div><div class="lab">Wochen</div></div>
+            <div class="stat"><div class="num" id="wDays">-</div><div class="lab">Tage</div></div>
+            <div class="stat"><div class="num" id="wHours">-</div><div class="lab">Stunden</div></div>
+            <div class="stat"><div class="num" id="wMins">-</div><div class="lab">Minuten</div></div>
+            <div class="stat"><div class="num" id="wSecs">-</div><div class="lab">Sekunden</div></div>
+          </div>
+          <div class="tiny">Live-Zähler ab dem <strong>20.07.2025</strong>.</div>
+        </div>
+      </section>
 
-function startGame(){
-  startScreenEl.style.display="none";
-  containerEl.style.display="block";
-  questionEl.textContent=riddles[0].question;
-  progressEl.textContent=`Rätsel 1 von ${riddles.length}`;
-  containerEl.classList.add("fadeIn");
-}
+      <!-- END -->
+      <section id="screenEnd" style="display:none;">
+        <h1>💖</h1>
+        <p style="font-size:18px; color:var(--text);">
+          <strong>Ich liebe dich Hasi</strong><br/>
+          Danke für den schönen Tag
+        </p>
+        <div class="row">
+          <button id="btnRestart" class="secondary">Nochmal 💞</button>
+        </div>
+      </section>
+    </div>
+  </div>
 
-function checkAnswer(){
-  const userAnswer=answerEl.value.trim().toLowerCase();
-  if(userAnswer===riddles[step].answer){
-    feedbackEl.style.color="#4BB543";
-    feedbackEl.textContent="Richtig ✅";
-    // Herz aufpoppen bei richtig
-    heartEl.style.top=`${50+Math.random()*10-5}%`;
-    heartEl.style.left=`${50+Math.random()*10-5}%`;
-    heartEl.style.transform="translate(-50%,-50%) scale(0)";
-    heartEl.style.opacity="0";
-    heartEl.style.animation="pop 0.8s ease forwards";
-    
-    step++;
-    answerEl.value="";
-    setTimeout(()=>{
-      feedbackEl.textContent="";
-      if(step<riddles.length){
-        questionEl.textContent=riddles[step].question;
-        containerEl.classList.remove("fadeIn");
-        void containerEl.offsetWidth;
-        containerEl.classList.add("fadeIn");
-        progressEl.textContent=`Rätsel ${step+1} von ${riddles.length}`;
-      } else {
-        containerEl.innerHTML=`
-          <h1>Happy Valentinstag ❤️</h1>
-          <p>Eli, ich liebe dich.</p>
-          <p>Danke, dass du diesen Abend mit mir verbringst.</p>
-          <p>💖</p>`;
-        // Großes Herz pulsierend
-        heartEl.style.top="50%";
-        heartEl.style.left="50%";
-        heartEl.style.transform="translate(-50%,-50%) scale(0)";
-        heartEl.style.animation="pop 1s ease forwards";
+  <script>
+    // ---------- Helpers ----------
+    const $ = (id) => document.getElementById(id);
+
+    function normalize(str){
+      return (str || "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[.,;:!?'"´`]/g, "");
+    }
+
+    // Accept "similar" answers by checking required keywords
+    function includesAll(haystack, keywords){
+      return keywords.every(k => haystack.includes(k));
+    }
+
+    function parseDDMMYYYY(s){
+      // expected "DD.MM.YYYY"
+      const m = (s || "").trim().match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+      if(!m) return null;
+      const dd = Number(m[1]), mm = Number(m[2]), yyyy = Number(m[3]);
+      // basic sanity
+      if(mm < 1 || mm > 12) return null;
+      if(dd < 1 || dd > 31) return null;
+
+      const d = new Date(yyyy, mm-1, dd, 0, 0, 0, 0);
+      // verify it didn't overflow (e.g., 31.02)
+      if(d.getFullYear() !== yyyy || d.getMonth() !== (mm-1) || d.getDate() !== dd) return null;
+      return d;
+    }
+
+    // ---------- App State ----------
+    const screens = {
+      start: $("screenStart"),
+      quiz: $("screenQuiz"),
+      end: $("screenEnd"),
+    };
+
+    const noError = $("noError");
+    const btnYes = $("btnYes");
+    const btnNo = $("btnNo");
+
+    const qTitle = $("qTitle");
+    const qText = $("qText");
+    const answerInput = $("answerInput");
+    const btnCheck = $("btnCheck");
+    const btnNext = $("btnNext");
+    const feedback = $("feedback");
+    const hint = $("hint");
+
+    const counterBox = $("counterBox");
+    let counterTimer = null;
+
+    const REL_START = new Date(2025, 6, 20, 0, 0, 0, 0); // 20.07.2025 (month is 0-based)
+
+    const quiz = [
+      {
+        title: "Frage 1/4",
+        text: "Was steht heute an?",
+        hint: "Tipp: Es geht um eine Überraschung + Restaurant.",
+        check: (raw) => {
+          const a = normalize(raw);
+
+          // Flexible acceptance:
+          // Must mention something like "überraschung" AND something like restaurant/dinner/essen
+          const hasSurprise = a.includes("überraschung") || a.includes("surprise");
+          const hasFoodPlace =
+            a.includes("restaurant") ||
+            a.includes("essen gehen") ||
+            a.includes("essen") ||
+            a.includes("dinner") ||
+            a.includes("abendessen") ||
+            a.includes("restaurantbesuch") ||
+            includesAll(a, ["restaurant", "besuch"]);
+
+          // Also accept near-exact phrase
+          const nearExact = includesAll(a, ["überraschung"]) && (a.includes("restaurant") || a.includes("besuch"));
+
+          const ok = (hasSurprise && hasFoodPlace) || nearExact;
+          const expected = "Eine Überraschung und ein Restaurantbesuch.";
+          return { ok, expected };
+        }
+      },
+      {
+        title: "Frage 2/4",
+        text: "Wie ist die Postleitzahl von dem Restaurant, wo wir essen gehen?",
+        hint: "Nur die PLZ eintippen (5 Ziffern).",
+        check: (raw) => {
+          const a = (raw || "").trim().replace(/\s+/g,"");
+          const ok = a === "10405";
+          return { ok, expected: "10405" };
+        }
+      },
+      {
+        title: "Frage 3/4",
+        text: "Wer wird immer gefatshamed?",
+        hint: "Vor- und Nachname 🙂",
+        check: (raw) => {
+          const a = normalize(raw);
+          const ok = a === "justus jonas";
+          return { ok, expected: "Justus Jonas" };
+        }
+      },
+      {
+        title: "Frage 4/4",
+        text: "Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
+        hint: "Format: 20.07.2025",
+        check: (raw) => {
+          const d = parseDDMMYYYY(raw);
+          if(!d) return { ok:false, expected:"20.07.2025", msg:"Format stimmt nicht. Bitte DD.MM.YYYY benutzen." };
+          const ok = d.getTime() === REL_START.getTime();
+          return { ok, expected:"20.07.2025" };
+        },
+        afterCorrect: () => {
+          // show counter after correct answer
+          startCounter();
+        }
       }
-    },800);
-  } else {
-    feedbackEl.style.color="#d33";
-    feedbackEl.textContent="Fast 😉 Versuch’s nochmal.";
-  }
-}
-</script>
+    ];
 
+    let qIndex = 0;
+    let answeredCorrectly = false;
+
+    function showScreen(name){
+      Object.values(screens).forEach(s => s.style.display = "none");
+      screens[name].style.display = "block";
+    }
+
+    function setFeedback(ok, text){
+      feedback.className = "feedback " + (ok ? "ok" : "no");
+      feedback.style.display = "block";
+      feedback.textContent = text;
+    }
+
+    function loadQuestion(){
+      answeredCorrectly = false;
+      const q = quiz[qIndex];
+      qTitle.textContent = q.title;
+      qText.textContent = q.text;
+      hint.textContent = q.hint || "";
+      answerInput.value = "";
+      answerInput.focus();
+
+      feedback.style.display = "none";
+      btnNext.style.display = "none";
+      btnCheck.disabled = false;
+
+      // Counter only appears after Q4 correct
+      if(qIndex !== 3){
+        stopCounter();
+        counterBox.style.display = "none";
+      }
+    }
+
+    function checkAnswer(){
+      const q = quiz[qIndex];
+      const raw = answerInput.value;
+
+      const res = q.check(raw);
+
+      if(res.ok){
+        answeredCorrectly = true;
+        btnCheck.disabled = true;
+        btnNext.style.display = "inline-block";
+
+        setFeedback(true, "✅ Richtig! Sehr stark.");
+
+        if(typeof q.afterCorrect === "function"){
+          q.afterCorrect();
+        }
+      }else{
+        const extra = res.msg ? "\n\n" + res.msg : "";
+        setFeedback(false, `❌ Leider falsch.\nErwartet: ${res.expected}${extra}`);
+      }
+    }
+
+    function nextQuestion(){
+      if(!answeredCorrectly) return;
+
+      qIndex++;
+      if(qIndex >= quiz.length){
+        showScreen("end");
+        stopCounter();
+        return;
+      }
+      loadQuestion();
+    }
+
+    function startCounter(){
+      counterBox.style.display = "block";
+
+      function tick(){
+        const now = new Date();
+        let diffMs = now - REL_START;
+        if(diffMs < 0) diffMs = 0;
+
+        const totalSeconds = Math.floor(diffMs / 1000);
+
+        const weeks = Math.floor(totalSeconds / (7*24*3600));
+        const days = Math.floor((totalSeconds % (7*24*3600)) / (24*3600));
+        const hours = Math.floor((totalSeconds % (24*3600)) / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = totalSeconds % 60;
+
+        $("wWeeks").textContent = weeks;
+        $("wDays").textContent = days;
+        $("wHours").textContent = hours;
+        $("wMins").textContent = mins;
+        $("wSecs").textContent = secs;
+      }
+
+      tick();
+      counterTimer = setInterval(tick, 1000);
+    }
+
+    function stopCounter(){
+      if(counterTimer){
+        clearInterval(counterTimer);
+        counterTimer = null;
+      }
+    }
+
+    // ---------- Start Screen Buttons ----------
+    btnNo.addEventListener("click", () => {
+      const code = "VAL-418";
+      noError.style.display = "block";
+      noError.textContent =
+        `Fehlercode: ${code}\n` +
+        `Unerwartete Eingabe: "Nein"\n\n` +
+        `Bitte nochmal versuchen. (Das System akzeptiert heute nur Liebe.)`;
+    });
+
+    btnYes.addEventListener("click", () => {
+      showScreen("quiz");
+      qIndex = 0;
+      loadQuestion();
+    });
+
+    // ---------- Quiz Buttons ----------
+    btnCheck.addEventListener("click", checkAnswer);
+    btnNext.addEventListener("click", nextQuestion);
+
+    // Enter = check answer (wenn noch nicht korrekt)
+    answerInput.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){
+        if(!answeredCorrectly) checkAnswer();
+        else nextQuestion();
+      }
+    });
+
+    // ---------- Restart ----------
+    $("btnRestart").addEventListener("click", () => {
+      stopCounter();
+      noError.style.display = "none";
+      showScreen("start");
+    });
+  </script>
 </body>
 </html>
