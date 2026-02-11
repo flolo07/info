@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Valentinstags-Date 💘</title>
+<style>
+:root{
+--bg1:#ff4d6d;
+--bg2:#7b2cbf;
+--card:#ffffffee;
+--text:#1b1b1f;
+--muted:#5b5b66;
+--btn:#111114;
+--btnText:#fff;
+--ok:#1f9d55;
+--no:#d7263d;
+}
+*{box-sizing:border-box;}
+body{
+margin:0;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:24px;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+color:var(--text);
+background:
+radial-gradient(1200px 800px at 20% 20%, #ff8fab 0%, transparent 60%),
+radial-gradient(1000px 700px at 80% 30%, #c77dff 0%, transparent 60%),
+linear-gradient(135deg,var(--bg1),var(--bg2));
+}
+.app{width:min(760px,100%);}
+.card{
+background:var(--card);
+border-radius:18px;
+box-shadow:0 18px 60px rgba(0,0,0,.22);
+padding:24px;
+}
+h1{margin:0 0 8px;font-size:28px;}
+p{margin:8px 0;color:var(--muted);line-height:1.5;}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;}
+button{
+border:none;
+border-radius:12px;
+padding:12px 16px;
+background:var(--btn);
+color:var(--btnText);
+font-size:16px;
+cursor:pointer;
+}
+button.secondary{
+background:#00000012;
+color:var(--text);
+}
+input{
+flex:1;
+padding:12px 14px;
+border-radius:12px;
+border:1px solid #00000022;
+font-size:16px;
+}
+.feedback{
+margin-top:14px;
+padding:12px 14px;
+border-radius:12px;
+display:none;
+white-space:pre-wrap;
+}
+.feedback.ok{background:#1f9d5510;color:#0f6a34;}
+.feedback.no{background:#d7263d10;color:#8b1724;}
+.counter{
+margin-top:14px;
+padding:14px;
+border-radius:14px;
+background:#00000008;
+display:none;
+}
+.counterGrid{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+margin-top:10px;
+}
+.stat{
+background:#fff;
+border-radius:14px;
+padding:10px;
+text-align:center;
+}
+.stat .num{font-size:20px;font-weight:700;}
+.stat .lab{font-size:12px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="card">
+
+<!-- START -->
+<section id="start">
+<h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
+<div class="row">
+<button id="yes">Ja</button>
+<button class="secondary" id="no">Nein</button>
+</div>
+<div id="error" class="feedback no"></div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" style="display:none;">
+<h1 id="qTitle"></h1>
+<p id="qText"></p>
+
+<div class="row">
+<input id="answer" placeholder="Antwort eintippen..." />
+<button id="check">Antwort prüfen</button>
+<button id="next" class="secondary" style="display:none;">Weiter</button>
+</div>
+
+<div id="feedback" class="feedback"></div>
+
+<div class="counter" id="counter">
+<strong>Wie lange sind wir schon zusammen?</strong>
+<div class="counterGrid">
+<div class="stat"><div class="num" id="w"></div><div class="lab">Wochen</div></div>
+<div class="stat"><div class="num" id="d"></div><div class="lab">Tage</div></div>
+<div class="stat"><div class="num" id="h"></div><div class="lab">Stunden</div></div>
+<div class="stat"><div class="num" id="m"></div><div class="lab">Minuten</div></div>
+<div class="stat"><div class="num" id="s"></div><div class="lab">Sekunden</div></div>
+</div>
+</div>
+
+</section>
+
+<!-- END -->
+<section id="end" style="display:none;">
+<h1>💖</h1>
+<p style="font-size:18px;color:var(--text);">
+<strong>Ich liebe dich Hasi</strong><br>
+Danke für den schönen Tag
+</p>
+</section>
+
+</div>
+</div>
+
+<script>
+const REL_DATE = new Date(2025,6,20);
+let index=0;
+let tries=0;
+let timer=null;
+
+const questions=[
+{
+text:"Was steht heute an?",
+check:(a)=>{
+a=a.toLowerCase();
+return (a.includes("überraschung")&&(a.includes("restaurant")||a.includes("essen")||a.includes("dinner")));
+},
+solution:"Eine Überraschung und ein Restaurantbesuch."
+},
+{
+text:"Wie ist die Postleitzahl von dem Restaurant wo wir essen gehen?",
+check:(a)=>a.trim()==="10405",
+solution:"10405"
+},
+{
+text:"Wer wird immer gefatshamed?",
+check:(a)=>a.trim().toLowerCase()==="justus jonas",
+solution:"Justus Jonas"
+},
+{
+text:"Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
+check:(a)=>a.trim()==="20.07.2025",
+solution:"20.07.2025",
+after:()=>{
+document.getElementById("counter").style.display="block";
+startCounter();
+}
+}
+];
+
+function show(id){
+["start","quiz","end"].forEach(s=>document.getElementById(s).style.display="none");
+document.getElementById(id).style.display="block";
+}
+
+document.getElementById("no").onclick=()=>{
+const e=document.getElementById("error");
+e.style.display="block";
+e.textContent="Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
+};
+
+document.getElementById("yes").onclick=()=>{
+show("quiz");
+loadQuestion();
+};
+
+function loadQuestion(){
+tries=0;
+document.getElementById("feedback").style.display="none";
+document.getElementById("next").style.display="none";
+document.getElementById("answer").value="";
+document.getElementById("qTitle").textContent="Frage "+(index+1)+"/4";
+document.getElementById("qText").textContent=questions[index].text;
+}
+
+document.getElementById("check").onclick=()=>{
+const input=document.getElementById("answer").value;
+const fb=document.getElementById("feedback");
+
+if(questions[index].check(input)){
+fb.className="feedback ok";
+fb.textContent="✅ Richtig.";
+fb.style.display="block";
+document.getElementById("next").style.display="inline-block";
+if(questions[index].after)questions[index].after();
+}else{
+tries++;
+fb.className="feedback no";
+if(tries>=3){
+fb.textContent="❌ Leider falsch.\nLösung: "+questions[index].solution;
+}else{
+fb.textContent="❌ Leider falsch. Versuch es nochmal.";
+}
+fb.style.display="block";
+}
+};
+
+document.getElementById("next").onclick=()=>{
+index++;
+if(index>=questions.length){
+show("end");
+clearInterval(timer);
+}else{
+loadQuestion();
+}
+};
+
+function startCounter(){
+timer=setInterval(()=>{
+let diff=(new Date()-REL_DATE)/1000;
+let weeks=Math.floor(diff/(7*24*3600));
+let days=Math.floor((diff%(7*24*3600))/(24*3600));
+let hours=Math.floor((diff%(24*3600))/3600);
+let mins=Math.floor((diff%3600)/60);
+let secs=Math.floor(diff%60);
+
+document.getElementById("w").textContent=weeks;
+document.getElementById("d").textContent=days;
+document.getElementById("h").textContent=hours;
+document.getElementById("m").textContent=mins;
+document.getElementById("s").textContent=secs;
+},1000);
+}
+</script>
+</body>
+</html>
