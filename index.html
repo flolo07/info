@@ -5,328 +5,602 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Valentinstags-Date 💘</title>
 <style>
-:root{
---bg1:#ff4d6d;
---bg2:#7b2cbf;
---card:#ffffffee;
---text:#1b1b1f;
---muted:#5b5b66;
---btn:#111114;
---btnText:#fff;
---ok:#1f9d55;
---no:#d7263d;
-}
-*{box-sizing:border-box;}
-body{
-margin:0;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:24px;
-font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-color:var(--text);
-background:
-radial-gradient(1200px 800px at 20% 20%, #ff8fab 0%, transparent 60%),
-radial-gradient(1000px 700px at 80% 30%, #c77dff 0%, transparent 60%),
-linear-gradient(135deg,var(--bg1),var(--bg2));
-}
-.app{width:min(760px,100%);}
-.card{
-background:var(--card);
-border-radius:18px;
-box-shadow:0 18px 60px rgba(0,0,0,.22);
-padding:24px;
-}
-h1{margin:0 0 8px;font-size:28px;}
-p{margin:8px 0;color:var(--muted);line-height:1.5;}
-.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;align-items:center;}
-button{
-border:none;
-border-radius:12px;
-padding:12px 16px;
-background:var(--btn);
-color:var(--btnText);
-font-size:16px;
-cursor:pointer;
-}
-button.secondary{
-background:#00000012;
-color:var(--text);
-}
-input{
-flex:1;
-padding:12px 14px;
-border-radius:12px;
-border:1px solid #00000022;
-font-size:16px;
-outline:none;
-}
-.feedback{
-margin-top:14px;
-padding:12px 14px;
-border-radius:12px;
-display:none;
-white-space:pre-wrap;
-}
-.feedback.ok{background:#1f9d5510;color:#0f6a34;}
-.feedback.no{background:#d7263d10;color:#8b1724;}
-.counter{
-margin-top:14px;
-padding:14px;
-border-radius:14px;
-background:#00000008;
-display:none;
-}
-.counterGrid{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:10px;
-margin-top:10px;
-}
-.stat{
-background:#fff;
-border-radius:14px;
-padding:10px;
-text-align:center;
-}
-.stat .num{font-size:20px;font-weight:700;}
-.stat .lab{font-size:12px;color:var(--muted);}
+  :root{
+    --bg1:#ff4d6d;
+    --bg2:#7b2cbf;
+    --card:#ffffffee;
+    --text:#1b1b1f;
+    --muted:#5b5b66;
+    --btn:#111114;
+    --btnText:#fff;
+    --ok:#1f9d55;
+    --no:#d7263d;
+    --soft:#00000010;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 20% 20%, #ff8fab 0%, transparent 60%),
+      radial-gradient(1000px 700px at 80% 30%, #c77dff 0%, transparent 60%),
+      linear-gradient(135deg,var(--bg1),var(--bg2));
+  }
+  .app{ width:min(780px,100%); }
+  .card{
+    background:var(--card);
+    border-radius:18px;
+    box-shadow:0 18px 60px rgba(0,0,0,.22);
+    padding:22px;
+    overflow:hidden;
+    position:relative;
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:var(--soft);
+    color:var(--muted);
+    font-size:14px;
+    white-space:nowrap;
+  }
+  .hearts{
+    display:flex;
+    gap:6px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:var(--soft);
+    user-select:none;
+    font-size:16px;
+  }
 
-.pdfBox{
-margin-top:14px;
-padding:14px;
-border-radius:14px;
-background:#00000008;
-display:none;
-}
-.pdfBox iframe{
-width:100%;
-height:520px;
-border:0;
-border-radius:14px;
-background:#fff;
-}
-.smallNote{font-size:13px;color:var(--muted);margin-top:10px;}
-a.link{color:inherit;}
+  h1{ margin:0 0 8px; font-size:28px; }
+  p{ margin:8px 0; color:var(--muted); line-height:1.5; }
+
+  .row{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; align-items:center; }
+  button{
+    border:none;
+    border-radius:12px;
+    padding:12px 16px;
+    background:var(--btn);
+    color:var(--btnText);
+    font-size:16px;
+    cursor:pointer;
+    transition: transform .06s ease, filter .15s ease;
+  }
+  button:active{ transform:scale(.98); }
+  button.secondary{
+    background:#00000012;
+    color:var(--text);
+  }
+  button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    filter:grayscale(.2);
+  }
+  input{
+    flex:1 1 260px;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #00000022;
+    font-size:16px;
+    outline:none;
+    background:#fff;
+  }
+  input:focus{
+    border-color:#7b2cbf66;
+    box-shadow:0 0 0 4px #7b2cbf1a;
+  }
+
+  .feedback, .hintBox, .unlockBox{
+    margin-top:14px;
+    padding:12px 14px;
+    border-radius:12px;
+    display:none;
+    white-space:pre-wrap;
+    border:1px solid #00000014;
+    background:#00000008;
+  }
+  .feedback.ok{ border-color:#1f9d5540; background:#1f9d5510; color:#0f6a34; }
+  .feedback.no{ border-color:#d7263d40; background:#d7263d10; color:#8b1724; }
+  .hintBox{ color:var(--muted); }
+  .unlockBox{
+    border-color:#7b2cbf40;
+    background:#7b2cbf10;
+    color:#3f1f66;
+  }
+  .shake{
+    animation: shake .35s ease;
+  }
+  @keyframes shake{
+    0%{ transform:translateX(0); }
+    20%{ transform:translateX(-6px); }
+    40%{ transform:translateX(6px); }
+    60%{ transform:translateX(-4px); }
+    80%{ transform:translateX(4px); }
+    100%{ transform:translateX(0); }
+  }
+
+  .counter{
+    margin-top:14px;
+    padding:14px;
+    border-radius:14px;
+    background:#00000008;
+    display:none;
+    border:1px solid #00000014;
+  }
+  .counterGrid{
+    display:grid;
+    grid-template-columns:repeat(5, minmax(70px,1fr));
+    gap:10px;
+    margin-top:10px;
+  }
+  .stat{
+    background:#fff;
+    border:1px solid #00000014;
+    border-radius:14px;
+    padding:10px;
+    text-align:center;
+  }
+  .stat .num{ font-size:20px; font-weight:800; }
+  .stat .lab{ font-size:12px; color:var(--muted); margin-top:4px; }
+
+  .pdfBox{
+    margin-top:14px;
+    padding:14px;
+    border-radius:14px;
+    background:#00000008;
+    border:1px solid #00000014;
+    display:none;
+  }
+  .pdfBox iframe{
+    width:100%;
+    height:520px;
+    border:0;
+    border-radius:14px;
+    background:#fff;
+  }
+  .smallNote{ font-size:13px; color:var(--muted); margin-top:10px; }
+  a.link{ color:inherit; text-decoration:underline; }
+
+  /* confetti */
+  #confetti{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .confetto{
+    position:absolute;
+    top:-12px;
+    width:10px;
+    height:14px;
+    border-radius:3px;
+    opacity:.95;
+    animation: fall 900ms linear forwards;
+    transform: rotate(0deg);
+    filter:saturate(1.15);
+  }
+  @keyframes fall{
+    to{
+      transform: translateY(120vh) rotate(720deg);
+      opacity: 0.9;
+    }
+  }
+
+  .footer{
+    margin-top:18px;
+    font-size:12px;
+    color:#00000055;
+  }
 </style>
 </head>
 <body>
 <div class="app">
-<div class="card">
+  <div class="card" id="card">
+    <div id="confetti"></div>
 
-<!-- START -->
-<section id="start">
-<h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
-<div class="row">
-<button id="yes">Ja</button>
-<button class="secondary" id="no">Nein</button>
-</div>
-<div id="error" class="feedback no"></div>
-</section>
-
-<!-- QUIZ -->
-<section id="quiz" style="display:none;">
-<h1 id="qTitle"></h1>
-<p id="qText"></p>
-
-<div class="row">
-<input id="answer" placeholder="Antwort eintippen..." autocomplete="off" />
-<button id="check">Antwort prüfen</button>
-<button id="next" class="secondary" style="display:none;">Weiter</button>
-</div>
-
-<div id="feedback" class="feedback"></div>
-
-<!-- PDF reveal (only for Justus question when correct) -->
-<div class="pdfBox" id="pdfJustus">
-  <strong>📄 Freigeschaltet: Die geheimen Tickets</strong>
-  <div class="row" style="margin-top:10px;">
-    <a class="link" href="tickets.pdf" target="_blank" rel="noopener">
-      <button>PDF im neuen Tab öffnen</button>
-    </a>
-    <button class="secondary" id="togglePdf">PDF hier anzeigen</button>
-  </div>
-
-  <div id="pdfWrap" style="display:none; margin-top:12px;">
-    <iframe src="tickets.pdf"></iframe>
-    <div class="smallNote">
-      Hinweis: Manche Handys (vor allem iPhone/Safari) öffnen PDFs lieber separat – dann einfach „PDF im neuen Tab öffnen“ nutzen.
+    <div class="topbar">
+      <div class="badge">💘 Valentinstags-Planer</div>
+      <div class="hearts" id="hearts">🤍 🤍 🤍 🤍</div>
     </div>
+
+    <!-- START -->
+    <section id="start">
+      <h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
+      <p>Es gibt nur eine richtige Richtung. Das Universum ist manchmal sehr eindeutig.</p>
+
+      <div class="row">
+        <button id="yes">Ja</button>
+        <button class="secondary" id="no">Nein</button>
+      </div>
+
+      <div id="error" class="feedback no"></div>
+      <div class="footer">P.S.: “Nein” ist heute nur ein Test, ob du Humor hast.</div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" style="display:none;">
+      <h1 id="qTitle"></h1>
+      <p id="qText"></p>
+
+      <div class="row">
+        <input id="answer" placeholder="Antwort eintippen..." autocomplete="off" />
+        <button id="check">Antwort prüfen</button>
+        <button id="next" class="secondary" style="display:none;">Weiter</button>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+      <div id="hintBox" class="hintBox"></div>
+
+      <div id="unlockBox" class="unlockBox"></div>
+
+      <!-- PDF reveal (Q3 only, after correct) -->
+      <div class="pdfBox" id="pdfJustus">
+        <strong>📄 Spezialinhalt freigeschaltet</strong>
+        <div class="row" style="margin-top:10px;">
+          <a class="link" href="tickets.pdf" target="_blank" rel="noopener">PDF im neuen Tab öffnen</a>
+          <button class="secondary" id="togglePdf">PDF hier anzeigen</button>
+        </div>
+        <div id="pdfWrap" style="display:none; margin-top:12px;">
+          <iframe src="tickets.pdf"></iframe>
+          <div class="smallNote">
+            Wenn das PDF hier nicht lädt (iPhone/Safari ist manchmal bockig), nutz „PDF im neuen Tab öffnen“.
+          </div>
+        </div>
+      </div>
+
+      <!-- counter (Q4 only, after correct) -->
+      <div class="counter" id="counter">
+        <strong>Wie lange sind wir schon zusammen?</strong>
+        <div class="counterGrid">
+          <div class="stat"><div class="num" id="w"></div><div class="lab">Wochen</div></div>
+          <div class="stat"><div class="num" id="d"></div><div class="lab">Tage</div></div>
+          <div class="stat"><div class="num" id="h"></div><div class="lab">Stunden</div></div>
+          <div class="stat"><div class="num" id="m"></div><div class="lab">Minuten</div></div>
+          <div class="stat"><div class="num" id="s"></div><div class="lab">Sekunden</div></div>
+        </div>
+        <div class="smallNote">Live-Zähler ab dem <strong>20.07.2025</strong>.</div>
+      </div>
+    </section>
+
+    <!-- END -->
+    <section id="end" style="display:none;">
+      <h1>💖</h1>
+      <p style="font-size:18px;color:var(--text);">
+        <strong>Ich liebe dich Hasi</strong><br/>
+        Danke für den schönen Tag
+      </p>
+      <div class="row">
+        <button class="secondary" id="restart">Nochmal 💞</button>
+      </div>
+      <div class="footer">Made with love & einem kleinen bisschen Chaos.</div>
+    </section>
   </div>
-</div>
-
-<div class="counter" id="counter">
-<strong>Wie lange sind wir schon zusammen?</strong>
-<div class="counterGrid">
-<div class="stat"><div class="num" id="w"></div><div class="lab">Wochen</div></div>
-<div class="stat"><div class="num" id="d"></div><div class="lab">Tage</div></div>
-<div class="stat"><div class="num" id="h"></div><div class="lab">Stunden</div></div>
-<div class="stat"><div class="num" id="m"></div><div class="lab">Minuten</div></div>
-<div class="stat"><div class="num" id="s"></div><div class="lab">Sekunden</div></div>
-</div>
-</div>
-</section>
-
-<!-- END -->
-<section id="end" style="display:none;">
-<h1>💖</h1>
-<p style="font-size:18px;color:var(--text);">
-<strong>Ich liebe dich Hasi</strong><br>
-Danke für den schönen Tag
-</p>
-</section>
-
-</div>
 </div>
 
 <script>
-const REL_DATE = new Date(2025,6,20);
-let index = 0;
-let tries = 0;
-let timer = null;
+  const REL_DATE = new Date(2025, 6, 20, 0, 0, 0, 0); // 20.07.2025
+  let timer = null;
 
-const questions = [
-  {
-    text: "Was steht heute an?",
-    check: (a) => {
-      a = (a || "").toLowerCase().trim();
-      const hasSurprise = a.includes("überraschung") || a.includes("surprise");
-      const hasFood =
-        a.includes("restaurant") ||
-        a.includes("essen") ||
-        a.includes("essen gehen") ||
-        a.includes("dinner") ||
-        a.includes("abendessen");
-      return hasSurprise && hasFood;
+  const el = (id) => document.getElementById(id);
+  const screens = { start: el("start"), quiz: el("quiz"), end: el("end") };
+
+  let index = 0;
+  let tries = 0;
+  let correctCount = 0;
+  let lockedNext = true;
+
+  const secretMessages = [
+    "🔓 Geheimnis 1/4: Dein Lachen macht meinen Kopf sofort leiser.",
+    "🔓 Geheimnis 2/4: Ich liebe, wie du Dinge besonders machst – ohne es zu merken.",
+    "🔓 Geheimnis 3/4: Ich würde dich sogar bei Mathefragen wählen. (Und das heißt was.)",
+    "🔓 Geheimnis 4/4: Heute ist nicht nur Valentinstag. Heute ist *unser* Tag."
+  ];
+
+  // Questions with hint tiers (no spoilers)
+  const questions = [
+    {
+      text: "Was steht heute an?",
+      check: (raw) => {
+        const a = normalize(raw);
+        const hasSurprise = a.includes("überraschung") || a.includes("surprise");
+        const hasFood = a.includes("restaurant") || a.includes("essen") || a.includes("dinner") || a.includes("abendessen");
+        return hasSurprise && hasFood;
+      },
+      hints: [
+        "Hinweis: Denk an den Plan für heute – es sind zwei Bestandteile.",
+        "Hinweis: Einer davon ist etwas Unerwartetes. Der andere hat mit Essen zu tun."
+      ],
+      solution: "Eine Überraschung und ein Restaurantbesuch."
     },
-    solution: "Eine Überraschung und ein Restaurantbesuch."
-  },
-  {
-    text: "Wie ist die Postleitzahl von dem Restaurant wo wir essen gehen?",
-    check: (a) => (a || "").trim() === "10405",
-    solution: "10405"
-  },
-  {
-    text: "Wer wird immer gefatshamed?",
-    check: (a) => (a || "").trim().toLowerCase() === "justus jonas",
-    solution: "Justus Jonas",
-    after: () => {
-      // PDF reveal on correct Justus answer
-      document.getElementById("pdfJustus").style.display = "block";
+    {
+      text: "Wie ist die Postleitzahl von dem Restaurant wo wir essen gehen?",
+      check: (raw) => (raw || "").trim().replace(/\s+/g, "") === "10405",
+      hints: [
+        "Hinweis: Es sind 5 Ziffern. Berlin-Vibes.",
+        "Hinweis: Fängt mit 10 an."
+      ],
+      solution: "10405"
+    },
+    {
+      text: "Wer wird immer gefatshamed?",
+      check: (raw) => normalize(raw) === "justus jonas",
+      hints: [
+        "Hinweis: Vor- und Nachname.",
+        "Hinweis: Drei ???-Universum."
+      ],
+      solution: "Justus Jonas",
+      afterCorrect: () => revealJustusPDF()
+    },
+    {
+      text: "Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
+      check: (raw) => (raw || "").trim() === "20.07.2025",
+      hints: [
+        "Hinweis: Ein Sommertag.",
+        "Hinweis: Format: DD.MM.YYYY"
+      ],
+      solution: "20.07.2025",
+      afterCorrect: () => startCounter()
     }
-  },
-  {
-    text: "Wann sind wir zusammen gekommen? (DD.MM.YYYY)",
-    check: (a) => (a || "").trim() === "20.07.2025",
-    solution: "20.07.2025",
-    after: () => {
-      document.getElementById("counter").style.display = "block";
-      startCounter();
-    }
+  ];
+
+  function normalize(str){
+    return (str || "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ")
+      .replace(/[.,;:!?'"´`]/g, "");
   }
-];
 
-function show(id){
-  ["start","quiz","end"].forEach(s => document.getElementById(s).style.display = "none");
-  document.getElementById(id).style.display = "block";
-}
-
-document.getElementById("no").onclick = () => {
-  const e = document.getElementById("error");
-  e.style.display = "block";
-  e.textContent = "Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
-};
-
-document.getElementById("yes").onclick = () => {
-  show("quiz");
-  index = 0;
-  loadQuestion();
-};
-
-function loadQuestion(){
-  tries = 0;
-  document.getElementById("feedback").style.display = "none";
-  document.getElementById("next").style.display = "none";
-  document.getElementById("answer").value = "";
-  document.getElementById("qTitle").textContent = "Frage " + (index+1) + "/4";
-  document.getElementById("qText").textContent = questions[index].text;
-
-  // hide extras unless unlocked
-  document.getElementById("pdfJustus").style.display = "none";
-  document.getElementById("pdfWrap").style.display = "none";
-
-  if(index !== 3){
-    document.getElementById("counter").style.display = "none";
-    if(timer){ clearInterval(timer); timer = null; }
+  function showScreen(name){
+    Object.values(screens).forEach(s => s.style.display = "none");
+    screens[name].style.display = "block";
   }
-}
 
-document.getElementById("check").onclick = () => {
-  const input = document.getElementById("answer").value;
-  const fb = document.getElementById("feedback");
-
-  if(questions[index].check(input)){
-    fb.className = "feedback ok";
-    fb.textContent = "✅ Richtig.";
-    fb.style.display = "block";
-    document.getElementById("next").style.display = "inline-block";
-
-    if(questions[index].after) questions[index].after();
-  } else {
-    tries++;
-    fb.className = "feedback no";
-    if(tries >= 3){
-      fb.textContent = "❌ Leider falsch.\nLösung: " + questions[index].solution;
-    } else {
-      fb.textContent = "❌ Leider falsch. Versuch es nochmal.";
+  function setHearts(count){
+    const total = 4;
+    let out = [];
+    for(let i=0;i<total;i++){
+      out.push(i < count ? "❤️" : "🤍");
     }
+    el("hearts").textContent = out.join(" ");
+  }
+
+  function setFeedback(type, text){
+    const fb = el("feedback");
+    fb.className = "feedback " + type;
+    fb.textContent = text;
     fb.style.display = "block";
   }
-};
 
-document.getElementById("next").onclick = () => {
-  index++;
-  if(index >= questions.length){
-    show("end");
-    if(timer){ clearInterval(timer); timer = null; }
-  } else {
+  function setHint(text){
+    const hb = el("hintBox");
+    if(!text){
+      hb.style.display = "none";
+      hb.textContent = "";
+      return;
+    }
+    hb.textContent = text;
+    hb.style.display = "block";
+  }
+
+  function setUnlock(text){
+    const ub = el("unlockBox");
+    if(!text){
+      ub.style.display = "none";
+      ub.textContent = "";
+      return;
+    }
+    ub.textContent = text;
+    ub.style.display = "block";
+  }
+
+  function lockNext(){
+    lockedNext = true;
+    el("next").style.display = "none";
+  }
+  function unlockNext(){
+    lockedNext = false;
+    el("next").style.display = "inline-block";
+  }
+
+  function loadQuestion(){
+    tries = 0;
+    lockNext();
+    el("answer").value = "";
+    el("answer").focus();
+
+    el("qTitle").textContent = `Frage ${index+1}/4`;
+    el("qText").textContent = questions[index].text;
+
+    el("feedback").style.display = "none";
+    setHint("");
+    setUnlock("");
+
+    // hide extras until unlocked
+    el("pdfJustus").style.display = "none";
+    el("pdfWrap").style.display = "none";
+    el("counter").style.display = "none";
+    stopCounter();
+
+    // subtle reset shake
+    el("card").classList.remove("shake");
+  }
+
+  // Start screen handlers
+  el("no").onclick = () => {
+    const e = el("error");
+    e.style.display = "block";
+    e.textContent = "Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
+    // tiny shake for drama
+    wiggleCard();
+  };
+
+  el("yes").onclick = () => {
+    showScreen("quiz");
+    index = 0;
+    correctCount = 0;
+    setHearts(correctCount);
     loadQuestion();
+  };
+
+  // Check answer logic with 3-try reveal
+  el("check").onclick = () => {
+    const q = questions[index];
+    const input = el("answer").value;
+
+    if(q.check(input)){
+      correctCount++;
+      setHearts(correctCount);
+
+      setFeedback("ok", "✅ Richtig.");
+      setHint("");
+      setUnlock(secretMessages[index] || "🔓 Geheimnis freigeschaltet.");
+
+      confettiBurst(28);
+      unlockNext();
+
+      // extras per question
+      if(typeof q.afterCorrect === "function"){
+        q.afterCorrect();
+      }
+    } else {
+      tries++;
+      wiggleCard();
+      if(tries === 1){
+        setFeedback("no", "❌ Leider falsch. Versuch es nochmal.");
+        setHint(q.hints?.[0] || "");
+      } else if(tries === 2){
+        setFeedback("no", "❌ Noch nicht. Du bist nah dran.");
+        setHint(q.hints?.[1] || "");
+      } else {
+        setFeedback("no", "❌ Leider falsch.\nLösung: " + q.solution);
+        setHint(""); // no more hint after solution
+      }
+      lockNext();
+    }
+  };
+
+  el("next").onclick = () => {
+    if(lockedNext) return;
+    index++;
+    if(index >= questions.length){
+      showScreen("end");
+      stopCounter();
+      return;
+    }
+    loadQuestion();
+  };
+
+  el("restart").onclick = () => {
+    stopCounter();
+    el("error").style.display = "none";
+    showScreen("start");
+    setHearts(0);
+  };
+
+  // Enter: check or next
+  el("answer").addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      const nextVisible = el("next").style.display !== "none";
+      if(nextVisible) el("next").click();
+      else el("check").click();
+    }
+  });
+
+  // PDF toggle
+  el("togglePdf").onclick = () => {
+    const wrap = el("pdfWrap");
+    wrap.style.display = (wrap.style.display === "none") ? "block" : "none";
+  };
+
+  function revealJustusPDF(){
+    // dramatic reveal
+    setUnlock((secretMessages[index] || "🔓 Geheimnis freigeschaltet.") + "\n\n🔓 Spezialinhalt wird entsperrt…");
+    el("pdfJustus").style.display = "block";
+    // small delay feels premium
+    setTimeout(() => {
+      // not forcing iframe open (iPhone might hate it). User can toggle.
+      // But we can gently hint by opening the container.
+      // el("pdfWrap").style.display = "block";
+    }, 650);
   }
-};
 
-document.getElementById("togglePdf").onclick = () => {
-  const w = document.getElementById("pdfWrap");
-  w.style.display = (w.style.display === "none") ? "block" : "none";
-};
+  // Counter
+  function startCounter(){
+    el("counter").style.display = "block";
+    function tick(){
+      let diff = Math.floor((Date.now() - REL_DATE.getTime()) / 1000);
+      if(diff < 0) diff = 0;
+      const weeks = Math.floor(diff / (7*24*3600));
+      const days  = Math.floor((diff % (7*24*3600)) / (24*3600));
+      const hours = Math.floor((diff % (24*3600)) / 3600);
+      const mins  = Math.floor((diff % 3600) / 60);
+      const secs  = diff % 60;
 
-document.getElementById("answer").addEventListener("keydown", (e) => {
-  if(e.key === "Enter"){
-    // Enter = check; if next button visible, go next
-    const nextVisible = document.getElementById("next").style.display !== "none";
-    if(nextVisible) document.getElementById("next").click();
-    else document.getElementById("check").click();
+      el("w").textContent = weeks;
+      el("d").textContent = days;
+      el("h").textContent = hours;
+      el("m").textContent = mins;
+      el("s").textContent = secs;
+    }
+    tick();
+    timer = setInterval(tick, 1000);
   }
-});
+  function stopCounter(){
+    if(timer){ clearInterval(timer); timer = null; }
+  }
 
-function startCounter(){
-  timer = setInterval(() => {
-    let diff = (new Date() - REL_DATE) / 1000;
-    if(diff < 0) diff = 0;
+  // Tiny shake
+  function wiggleCard(){
+    const c = el("card");
+    c.classList.remove("shake");
+    // force reflow
+    void c.offsetWidth;
+    c.classList.add("shake");
+  }
 
-    let weeks = Math.floor(diff / (7*24*3600));
-    let days  = Math.floor((diff % (7*24*3600)) / (24*3600));
-    let hours = Math.floor((diff % (24*3600)) / 3600);
-    let mins  = Math.floor((diff % 3600) / 60);
-    let secs  = Math.floor(diff % 60);
+  // Confetti (simple, delightful)
+  function confettiBurst(n=20){
+    const box = el("confetti");
+    const W = box.clientWidth || window.innerWidth;
+    for(let i=0;i<n;i++){
+      const d = document.createElement("div");
+      d.className = "confetto";
+      d.style.left = Math.floor(Math.random() * W) + "px";
+      d.style.animationDuration = (650 + Math.random()*650) + "ms";
+      d.style.transform = `rotate(${Math.random()*360}deg)`;
 
-    document.getElementById("w").textContent = weeks;
-    document.getElementById("d").textContent = days;
-    document.getElementById("h").textContent = hours;
-    document.getElementById("m").textContent = mins;
-    document.getElementById("s").textContent = secs;
-  }, 1000);
-}
+      // random “pretty” color palette
+      const colors = ["#ff4d6d","#7b2cbf","#ffd6a5","#caffbf","#9bf6ff","#ffc6ff","#fdffb6"];
+      d.style.background = colors[Math.floor(Math.random()*colors.length)];
+
+      // random size variation
+      const w = 6 + Math.random()*8;
+      const h = 10 + Math.random()*10;
+      d.style.width = w + "px";
+      d.style.height = h + "px";
+
+      box.appendChild(d);
+      setTimeout(() => d.remove(), 1200);
+    }
+  }
 </script>
 </body>
 </html>
