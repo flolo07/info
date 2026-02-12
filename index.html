@@ -220,18 +220,15 @@
       <div class="hearts" id="hearts">🤍 🤍 🤍 🤍</div>
     </div>
 
-    <!-- START -->
     <section id="start">
       <h1>Eli, willst du heute mit mir auf ein Valentinstags Date gehen?</h1>
-
       <div class="row">
         <button id="yes">Ja</button>
         <button class="secondary" id="no">Nein</button>
       </div>
-
       <div id="error" class="feedback no"></div>
+    </section>
 
-    <!-- QUIZ -->
     <section id="quiz" style="display:none;">
       <h1 id="qTitle"></h1>
       <p id="qText"></p>
@@ -244,10 +241,8 @@
 
       <div id="feedback" class="feedback"></div>
       <div id="hintBox" class="hintBox"></div>
-
       <div id="unlockBox" class="unlockBox"></div>
 
-      <!-- PDF reveal (Q3 only, after correct) -->
       <div class="pdfBox" id="pdfJustus">
         <strong>📄 Spezialinhalt freigeschaltet</strong>
         <div class="row" style="margin-top:10px;">
@@ -262,7 +257,6 @@
         </div>
       </div>
 
-      <!-- counter (Q4 only, after correct) -->
       <div class="counter" id="counter">
         <strong>Wie lange sind wir schon zusammen?</strong>
         <div class="counterGrid">
@@ -276,7 +270,6 @@
       </div>
     </section>
 
-    <!-- END -->
     <section id="end" style="display:none;">
       <h1>💖</h1>
       <p style="font-size:18px;color:var(--text);">
@@ -292,7 +285,7 @@
 </div>
 
 <script>
-  const REL_DATE = new Date(2025, 6, 20, 0, 0, 0, 0); // 20.07.2025
+  const REL_DATE = new Date(2025, 6, 20, 0, 0, 0, 0); // 20.07.2025 (Monat ist 0-basiert, 6 = Juli)
   let timer = null;
 
   const el = (id) => document.getElementById(id);
@@ -301,17 +294,15 @@
   let index = 0;
   let tries = 0;
   let correctCount = 0;
-  let lockedNext = true;
+  let isLocked = true;
 
   const secretMessages = [
-    "🔓 Fakt  1/4: Ich liebe dich wie eine exotherme Reaktion –
-je näher wir kommen, desto wärmer wird es",
-    "🔓 Fakt 2/4: Du bist ein Monopol auf meinem Herzen. ",
+    "🔓 Fakt 1/4: Ich liebe dich wie eine exotherme Reaktion – je näher wir kommen, desto wärmer wird es",
+    "🔓 Fakt 2/4: Du bist ein Monopol auf meinem Herzen.",
     "🔓 Fakt 3/4: Ich liebe dich wie ein Pinguin seinen Partner.",
-    "🔓 Fakt 4/4: Wenn ich die Pflanze bin,dann bist du mein Licht.Für meine Photosynthese. "
+    "🔓 Fakt 4/4: Wenn ich die Pflanze bin, dann bist du mein Licht. Für meine Photosynthese."
   ];
 
-  // Questions with hint tiers (no spoilers)
   const questions = [
     {
       text: "Was steht heute an?",
@@ -389,38 +380,23 @@ je näher wir kommen, desto wärmer wird es",
 
   function setHint(text){
     const hb = el("hintBox");
-    if(!text){
-      hb.style.display = "none";
-      hb.textContent = "";
-      return;
-    }
+    if(!text){ hb.style.display = "none"; return; }
     hb.textContent = text;
     hb.style.display = "block";
   }
 
   function setUnlock(text){
     const ub = el("unlockBox");
-    if(!text){
-      ub.style.display = "none";
-      ub.textContent = "";
-      return;
-    }
+    if(!text){ ub.style.display = "none"; return; }
     ub.textContent = text;
     ub.style.display = "block";
   }
 
-  function lockNext(){
-    lockedNext = true;
-    el("next").style.display = "none";
-  }
-  function unlockNext(){
-    lockedNext = false;
-    el("next").style.display = "inline-block";
-  }
-
   function loadQuestion(){
     tries = 0;
-    lockNext();
+    isLocked = true;
+    el("next").style.display = "none";
+    el("check").style.display = "inline-block";
     el("answer").value = "";
     el("answer").focus();
 
@@ -431,22 +407,16 @@ je näher wir kommen, desto wärmer wird es",
     setHint("");
     setUnlock("");
 
-    // hide extras until unlocked
     el("pdfJustus").style.display = "none";
     el("pdfWrap").style.display = "none";
     el("counter").style.display = "none";
     stopCounter();
-
-    // subtle reset shake
-    el("card").classList.remove("shake");
   }
 
-  // Start screen handlers
   el("no").onclick = () => {
     const e = el("error");
     e.style.display = "block";
     e.textContent = "Fehlercode VAL-418\nUngültige Auswahl.\nBitte erneut versuchen.";
-    // tiny shake for drama
     wiggleCard();
   };
 
@@ -454,11 +424,10 @@ je näher wir kommen, desto wärmer wird es",
     showScreen("quiz");
     index = 0;
     correctCount = 0;
-    setHearts(correctCount);
+    setHearts(0);
     loadQuestion();
   };
 
-  // Check answer logic with 3-try reveal
   el("check").onclick = () => {
     const q = questions[index];
     const input = el("answer").value;
@@ -466,135 +435,92 @@ je näher wir kommen, desto wärmer wird es",
     if(q.check(input)){
       correctCount++;
       setHearts(correctCount);
-
       setFeedback("ok", "✅ Richtig.");
-      setHint("");
-      setUnlock(secretMessages[index] || "🔓 Geheimnis freigeschaltet.");
-
+      setUnlock(secretMessages[index]);
       confettiBurst(28);
-      unlockNext();
-
-      // extras per question
-      if(typeof q.afterCorrect === "function"){
-        q.afterCorrect();
-      }
+      isLocked = false;
+      el("next").style.display = "inline-block";
+      el("check").style.display = "none";
+      if(typeof q.afterCorrect === "function") q.afterCorrect();
     } else {
       tries++;
       wiggleCard();
-      if(tries === 1){
-        setFeedback("no", "❌ Leider falsch. Versuch es nochmal.");
-        setHint(q.hints?.[0] || "");
-      } else if(tries === 2){
-        setFeedback("no", "❌ Noch nicht. Du bist nah dran.");
-        setHint(q.hints?.[1] || "");
+      if(tries === 1) {
+        setFeedback("no", "❌ Leider falsch.");
+        setHint(q.hints[0]);
+      } else if(tries === 2) {
+        setHint(q.hints[1]);
       } else {
-        setFeedback("no", "❌ Leider falsch.\nLösung: " + q.solution);
-        setHint(""); // no more hint after solution
+        setFeedback("no", "❌ Lösung: " + q.solution);
+        setHint("");
+        isLocked = false;
+        el("next").style.display = "inline-block";
       }
-      lockNext();
     }
   };
 
   el("next").onclick = () => {
-    if(lockedNext) return;
     index++;
     if(index >= questions.length){
       showScreen("end");
-      stopCounter();
-      return;
+    } else {
+      loadQuestion();
     }
-    loadQuestion();
   };
 
   el("restart").onclick = () => {
-    stopCounter();
-    el("error").style.display = "none";
-    showScreen("start");
-    setHearts(0);
+    location.reload(); 
   };
 
-  // Enter: check or next
-  el("answer").addEventListener("keydown", (e) => {
-    if(e.key === "Enter"){
-      const nextVisible = el("next").style.display !== "none";
-      if(nextVisible) el("next").click();
+  el("answer").onkeydown = (e) => {
+    if(e.key === "Enter") {
+      if(el("next").style.display !== "none") el("next").click();
       else el("check").click();
     }
-  });
+  };
 
-  // PDF toggle
   el("togglePdf").onclick = () => {
-    const wrap = el("pdfWrap");
-    wrap.style.display = (wrap.style.display === "none") ? "block" : "none";
+    const w = el("pdfWrap");
+    w.style.display = (w.style.display === "none") ? "block" : "none";
   };
 
   function revealJustusPDF(){
-    // dramatic reveal
-    setUnlock((secretMessages[index] || "🔓 Geheimnis freigeschaltet.") + "\n\n🔓 Spezialinhalt wird entsperrt…");
     el("pdfJustus").style.display = "block";
-    // small delay feels premium
-    setTimeout(() => {
-      // not forcing iframe open (iPhone might hate it). User can toggle.
-      // But we can gently hint by opening the container.
-      // el("pdfWrap").style.display = "block";
-    }, 650);
   }
 
-  // Counter
   function startCounter(){
     el("counter").style.display = "block";
-    function tick(){
+    const tick = () => {
       let diff = Math.floor((Date.now() - REL_DATE.getTime()) / 1000);
       if(diff < 0) diff = 0;
-      const weeks = Math.floor(diff / (7*24*3600));
-      const days  = Math.floor((diff % (7*24*3600)) / (24*3600));
-      const hours = Math.floor((diff % (24*3600)) / 3600);
-      const mins  = Math.floor((diff % 3600) / 60);
-      const secs  = diff % 60;
-
-      el("w").textContent = weeks;
-      el("d").textContent = days;
-      el("h").textContent = hours;
-      el("m").textContent = mins;
-      el("s").textContent = secs;
-    }
+      el("w").textContent = Math.floor(diff / (7*24*3600));
+      el("d").textContent = Math.floor((diff % (7*24*3600)) / (24*3600));
+      el("h").textContent = Math.floor((diff % (24*3600)) / 3600);
+      el("m").textContent = Math.floor((diff % 3600) / 60);
+      el("s").textContent = diff % 60;
+    };
     tick();
     timer = setInterval(tick, 1000);
   }
+
   function stopCounter(){
-    if(timer){ clearInterval(timer); timer = null; }
+    if(timer) clearInterval(timer);
   }
 
-  // Tiny shake
   function wiggleCard(){
-    const c = el("card");
-    c.classList.remove("shake");
-    // force reflow
-    void c.offsetWidth;
-    c.classList.add("shake");
+    el("card").classList.remove("shake");
+    void el("card").offsetWidth;
+    el("card").classList.add("shake");
   }
 
-  // Confetti (simple, delightful)
   function confettiBurst(n=20){
     const box = el("confetti");
-    const W = box.clientWidth || window.innerWidth;
     for(let i=0;i<n;i++){
       const d = document.createElement("div");
       d.className = "confetto";
-      d.style.left = Math.floor(Math.random() * W) + "px";
-      d.style.animationDuration = (650 + Math.random()*650) + "ms";
-      d.style.transform = `rotate(${Math.random()*360}deg)`;
-
-      // random “pretty” color palette
-      const colors = ["#ff4d6d","#7b2cbf","#ffd6a5","#caffbf","#9bf6ff","#ffc6ff","#fdffb6"];
-      d.style.background = colors[Math.floor(Math.random()*colors.length)];
-
-      // random size variation
-      const w = 6 + Math.random()*8;
-      const h = 10 + Math.random()*10;
-      d.style.width = w + "px";
-      d.style.height = h + "px";
-
+      d.style.left = Math.random() * 100 + "%";
+      d.style.animationDuration = (600 + Math.random()*600) + "ms";
+      d.style.background = ["#ff4d6d","#7b2cbf","#ffd6a5","#caffbf"][Math.floor(Math.random()*4)];
       box.appendChild(d);
       setTimeout(() => d.remove(), 1200);
     }
